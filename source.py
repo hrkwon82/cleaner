@@ -9,6 +9,9 @@ from hashlib import sha256
 from bs4 import BeautifulSoup
 from datetime import datetime, timedelta
 
+print ("HS클리너 ver1.8")
+print ("\n")
+
 def process(user_id,user_pw):
 
     decode_service_code='''
@@ -134,7 +137,7 @@ def process(user_id,user_pw):
                 "service_code" : service_code
             }
 
-            time.sleep(1)
+            time.sleep(0.5)
             req = session.post('https://gallog.dcinside.com/%s/ajax/log_list_ajax/delete'%user_id,data=delete_data)
 
             result = req.text
@@ -170,12 +173,13 @@ def process(user_id,user_pw):
                 "service_code" : service_code
             }
 
-            time.sleep(1)
+            time.sleep(0.5)
             req = session.post('https://gallog.dcinside.com/%s/ajax/log_list_ajax/delete'%user_id,data=delete_data)
 
             result = req.text
             print ("comment -> " + set + " -> " + result)
 
+    print ("\n")
     input ("클리너 작동을 마쳤어요! : ") #press any key
 
 

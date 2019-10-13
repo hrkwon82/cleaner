@@ -108,76 +108,88 @@ def process(user_id,user_pw):
     print ("\n")
 
     time.sleep(5)
-
+    
     while True: #post delete
 
-        req = session.get('https://gallog.dcinside.com/%s/posting'%user_id)
-        soup = BeautifulSoup(req.text,'lxml')
-        content_form = soup.select('ul.cont_listbox > li')
-        print ("LOAD")
+        try:
 
-        if not content_form:
-            print ("더이상 삭제할 게시글이 없어요!")
-            break
-        else:
-            pass
+            req = session.get('https://gallog.dcinside.com/%s/posting'%user_id)
+            soup = BeautifulSoup(req.text,'lxml')
+            content_form = soup.select('ul.cont_listbox > li')
+            print ("LOAD")
 
-        delete_set = []
+            if not content_form:
+                print ("더이상 삭제할 게시글이 없어요!")
+                break
+            else:
+                pass
 
-        for i in content_form:
-            data_no = (i.attrs['data-no'])
-            delete_set.append(data_no)
+            delete_set = []
 
-        for set in delete_set:
-        
+            for i in content_form:
+                data_no = (i.attrs['data-no'])
+                delete_set.append(data_no)
 
-            delete_data = {
-                "ci_t" : ci_t,
-                "no" : set,
-                "service_code" : service_code
-            }
-
-            time.sleep(0.5)
-            req = session.post('https://gallog.dcinside.com/%s/ajax/log_list_ajax/delete'%user_id,data=delete_data)
-
-            result = req.text
-            print ("posting -> " + set + " -> " + result)
+            for set in delete_set:
             
-        delete_set.clear()
+
+                delete_data = {
+                    "ci_t" : ci_t,
+                    "no" : set,
+                    "service_code" : service_code
+                }
+
+                time.sleep(0.5)
+                req = session.post('https://gallog.dcinside.com/%s/ajax/log_list_ajax/delete'%user_id,data=delete_data)
+
+                result = req.text
+                print ("posting -> " + set + " -> " + result)
+                
+            delete_set.clear()
+          
+        except Exception as ex:
+            print (ex)
+            pass
 
     while True: #comment delete
 
-        req = session.get('https://gallog.dcinside.com/%s/comment'%user_id)
-        soup = BeautifulSoup(req.text,'lxml')
-        content_form = soup.select('ul.cont_listbox > li')
-        print ("LOAD")
+        try:
 
-        if not content_form:
-            print ("더이상 삭제할 댓글이 없어요!")
-            break
-        else:
+            req = session.get('https://gallog.dcinside.com/%s/comment'%user_id)
+            soup = BeautifulSoup(req.text,'lxml')
+            content_form = soup.select('ul.cont_listbox > li')
+            print ("LOAD")
+
+            if not content_form:
+                print ("더이상 삭제할 댓글이 없어요!")
+                break
+            else:
+                pass
+
+            delete_set = []
+
+            for i in content_form:
+                data_no = (i.attrs['data-no'])
+                delete_set.append(data_no)
+
+            for set in delete_set:
+            
+
+                delete_data = {
+                    "ci_t" : ci_t,
+                    "no" : set,
+                    "service_code" : service_code
+                }
+
+                time.sleep(0.5)
+                req = session.post('https://gallog.dcinside.com/%s/ajax/log_list_ajax/delete'%user_id,data=delete_data)
+
+                result = req.text
+                print ("comment -> " + set + " -> " + result)
+
+        except Exception as ex:
+            print (ex)
             pass
-
-        delete_set = []
-
-        for i in content_form:
-            data_no = (i.attrs['data-no'])
-            delete_set.append(data_no)
-
-        for set in delete_set:
-        
-
-            delete_data = {
-                "ci_t" : ci_t,
-                "no" : set,
-                "service_code" : service_code
-            }
-
-            time.sleep(0.5)
-            req = session.post('https://gallog.dcinside.com/%s/ajax/log_list_ajax/delete'%user_id,data=delete_data)
-
-            result = req.text
-            print ("comment -> " + set + " -> " + result)
 
     print ("\n")
     input ("클리너 작동을 마쳤어요! : ") #press any key

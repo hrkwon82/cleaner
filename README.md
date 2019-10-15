@@ -2,7 +2,8 @@
 
 이메일 : sinyuyeon491@gmail.com
 
-개발에 사용된 모듈 :
+개발에 사용된 모듈 
+-------------
 
 1. requests
 2. json

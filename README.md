@@ -1,7 +1,7 @@
 개발자에게 연락하기
 -------------
 
-문의 : https://gallog.dcinside.com/googly/guestbook
+갤로그 : https://gallog.dcinside.com/googly/guestbook
 
 이메일 : sinyuyeon491@gmail.com
 

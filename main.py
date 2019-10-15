@@ -7,7 +7,10 @@ import threading
 from hashlib import sha256
 from bs4 import BeautifulSoup
 from datetime import datetime, timedelta
+from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtWidgets import *
+from PyQt5.QtCore import *
+from PyQt5.QtGui import *
 
 from login_py import login
 

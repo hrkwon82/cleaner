@@ -16,3 +16,8 @@
 5. BeautifulSoup
 6. PyQt5
 7. datetime
+
+사용법
+-------------
+
+<img src="https://i.imgur.com/jPhrttj.gif" title="Honeycam 2019-10-16 04-09-47.gif"/>

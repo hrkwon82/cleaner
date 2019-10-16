@@ -1,3 +1,5 @@
+# 2019-9-17
+
 import re
 import sys
 import requests
@@ -78,7 +80,6 @@ class MainWindow(QMainWindow):
 
         
         #========================== 부가 영역 시작 ==========================
-
         self.progress = QLabel("    로그인 전",self)
         self.progress.move(0,240)
         self.progress.resize(300,30)
@@ -87,7 +88,7 @@ class MainWindow(QMainWindow):
 
         self.setWindowTitle("Cleaner")
         self.setFixedSize(300,270)
-        self.setWindowIcon(QIcon("asset_folder\icon.jpg"))
+        self.setWindowIcon(QIcon("asset\icon.jpg"))
         self.setStyleSheet("background-color: #FFFFFF;")
         self.show()
         #========================== 부가 영역 끝 ==========================

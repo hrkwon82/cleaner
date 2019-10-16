@@ -11,11 +11,12 @@
 
 1. requests
 2. json
-3. threading
-4. hashlib
-5. BeautifulSoup
-6. PyQt5
-7. datetime
+3. js2py 
+4. threading
+5. hashlib
+6. BeautifulSoup
+7. PyQt5
+8. datetime
 
 사용법
 -------------

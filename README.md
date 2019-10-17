@@ -17,7 +17,12 @@
 6. PyQt5
 7. datetime
 
-사용법
+HOW-TO-USE 
+-------------
+
+https://m.dcinside.com/board/programming/1143805
+
+RUN-GIF 
 -------------
 
 <img src="https://i.imgur.com/jPhrttj.gif" title="Honeycam 2019-10-16 04-09-47.gif"/>

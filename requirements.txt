@@ -1,0 +1,8 @@
+beautifulsoup4
+bs4
+lxml
+PyQt5
+requests
+datetime
+pytz
+Js2Py

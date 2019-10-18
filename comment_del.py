@@ -6,14 +6,12 @@ import time
 from bs4 import BeautifulSoup
 from decode_py import decode
 
-
 def del_com(SESS,DEL_FLAG,user_id):
 
         req = SESS.get('https://gallog.dcinside.com/%s/posting'%user_id)
         soup = BeautifulSoup(req.text,'lxml')
 
         service_code_origin = soup.find('input', {'name' : 'service_code'})['value']
-        ci_t = SESS.cookies.get_dict()['ci_c']
 
         data  = soup.select("script")[29]
 
@@ -30,8 +28,7 @@ def del_com(SESS,DEL_FLAG,user_id):
         # 정규식
 
         service_code = decode(service_code_origin, r_value)
-
-        time.sleep(5)
+        time.sleep(0.5)
 
         while True: #P_DEL
 

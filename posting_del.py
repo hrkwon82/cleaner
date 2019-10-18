@@ -12,7 +12,6 @@ def del_pos(SESS,DEL_FLAG,user_id):
         soup = BeautifulSoup(req.text,'lxml')
 
         service_code_origin = soup.find('input', {'name' : 'service_code'})['value']
-        ci_t = SESS.cookies.get_dict()['ci_c']
 
         data  = soup.select("script")[29]
 
@@ -30,7 +29,7 @@ def del_pos(SESS,DEL_FLAG,user_id):
 
         service_code = decode(service_code_origin, r_value)
 
-        time.sleep(5)
+        time.sleep(0.5)
 
         while True: #P_DEL
 

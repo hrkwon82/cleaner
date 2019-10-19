@@ -55,7 +55,6 @@ def del_pos(SESS,DEL_FLAG,user_id):
                 for set in delete_set:
                         
                     delete_data = {
-                        "ci_t" : ci_t,
                         "no" : set,
                         "service_code" : service_code
                     }

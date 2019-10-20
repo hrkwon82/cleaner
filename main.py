@@ -1,4 +1,4 @@
-# 2019-9-17
+# 2019-9-20
 
 import re
 import sys
@@ -6,6 +6,7 @@ import requests
 import json
 import time
 import threading
+import js2py
 from hashlib import sha256
 from bs4 import BeautifulSoup
 from datetime import datetime, timedelta
@@ -20,6 +21,36 @@ from posting_del import del_pos
 from comment_del import del_com
 
 LOGIN_FLAG = False
+
+decode_service_code='''
+    function get_service_code(service_code, r_value){
+
+    var a,e,n,t,f,d,h,i = "yL/M=zNa0bcPQdReSfTgUhViWjXkYIZmnpo+qArOBs1Ct2D3uE4Fv5G6wHl78xJ9K",
+    o = "",
+    c = 0;
+    for (r_value = r_value.replace(/[^A-Za-z0-9+/=]/g,""); c < r_value.length;) {
+        t = i.indexOf(r_value.charAt(c++));
+        f = i.indexOf(r_value.charAt(c++));
+        d = i.indexOf(r_value.charAt(c++));
+        h = i.indexOf(r_value.charAt(c++));
+        a = t << 2 | f >> 4;
+        e = (15 & f) << 4 | d >> 2;
+        n = (3 & d) << 6 | h;
+        o += String.fromCharCode(a);
+        64 != d && (o += String.fromCharCode(e));
+        64 != h && (o += String.fromCharCode(n));
+        }
+        var tvl = o;
+        var fi = parseInt(tvl.substr(0,1));
+        fi = fi > 5 ? fi - 5 : fi + 4;
+        var _r = tvl.replace(/^./, fi);
+        var _rs = _r.split(",");
+        var replace = "";
+        for (e = 0; e < _rs.length; e++) replace += String.fromCharCode(2 * (_rs[e] - e - 1) / (13 - e - 1));
+        return service_code.replace(/(.{10})$/, replace)
+    }
+    '''
+decode_service_code = js2py.eval_js(decode_service_code)
 
 class MainWindow(QMainWindow):
 
@@ -120,32 +151,49 @@ class MainWindow(QMainWindow):
             print (ex)
             self.progress.setText("    로그인 실패")
             pass
-    
 
     def execute_main_p(self):
-        
-        def process():
 
-            if LOGIN_FLAG == True:  
+        user_id = self.usid.text()
+        # convert to service_code_origin - decode_service_code
+        req = SESS.get('https://gallog.dcinside.com/%s/posting'%user_id)
+        soup = BeautifulSoup(req.text,'lxml')
+
+        service_code_origin = soup.find('input', {'name' : 'service_code'})['value']
+
+        data  = soup.select("script")[29]
+
+        cut_1 = "var _r = _d"
+        cut_2 = '<script type="text/javascript">'
+        cut_3 = "</script>"
+
+        cut_data = str(data).replace(cut_1,"")
+        cut_data = str(cut_data).replace(cut_2,"")
+        cut_data = str(cut_data).replace(cut_3,"")
+        _r = re.sub("\n","",str(cut_data))
+        r_value = re.sub("['();]","",str(_r))
+        r_value = str(r_value)
+        # 정규식
+
+        service_code = decode_service_code(service_code_origin, r_value)
+
+        if LOGIN_FLAG == True:  
+
                 
-                global DEL_FLAG
-                DEL_FLAG = []
+            global DEL_FLAG
+            DEL_FLAG = []
+            self.progress.setText("    POST-DEL...")
+            time.sleep(0.2)
+            thr = (threading.Thread(target=del_pos,args=(SESS,DEL_FLAG,user_id,service_code)))
+            thr.start()
+            self.p_d_btn.setEnabled(False)
+            self.r_d_btn.setEnabled(False)
+            self.p_d_btn.setStyleSheet("border:1px solid #ccc; background-color : #5f7b89; color : white;")
+            self.r_d_btn.setStyleSheet("border:1px solid #ccc; background-color : #5f7b89; color : white;")
 
-                usid = self.usid.text()
-                self.progress.setText("    POST-DEL...")
-                self.p_d_btn.setEnabled(False)
-                self.r_d_btn.setEnabled(False)
-                self.p_d_btn.setStyleSheet("border:1px solid #ccc; background-color : #5f7b89; color : white;")
-                self.r_d_btn.setStyleSheet("border:1px solid #ccc; background-color : #5f7b89; color : white;")
+        else:
 
-                thr = (threading.Thread(target=del_pos,args=(SESS,DEL_FLAG,usid)))
-                thr.start()
-
-            else:
-
-                self.progress.setText("    로그인 해줘요!")
-
-        process()   
+            self.progress.setText("    로그인 해줘요!")
         
         def check():
 
@@ -167,29 +215,47 @@ class MainWindow(QMainWindow):
         chk.start()           
 
     def execute_main_c(self):
-        
-        def process():
 
-            if LOGIN_FLAG == True:
+        user_id = self.usid.text()
+        # convert to service_code_origin - decode_service_code
+        req = SESS.get('https://gallog.dcinside.com/%s/posting'%user_id)
+        soup = BeautifulSoup(req.text,'lxml')
+
+        service_code_origin = soup.find('input', {'name' : 'service_code'})['value']
+
+        data  = soup.select("script")[29]
+
+        cut_1 = "var _r = _d"
+        cut_2 = '<script type="text/javascript">'
+        cut_3 = "</script>"
+
+        cut_data = str(data).replace(cut_1,"")
+        cut_data = str(cut_data).replace(cut_2,"")
+        cut_data = str(cut_data).replace(cut_3,"")
+        _r = re.sub("\n","",str(cut_data))
+        r_value = re.sub("['();]","",str(_r))
+        r_value = str(r_value)
+        # 정규식
+
+        service_code = decode_service_code(service_code_origin, r_value)
+
+        if LOGIN_FLAG == True:  
+
                 
-                global DEL_FLAG
-                DEL_FLAG = []
+            global DEL_FLAG
+            DEL_FLAG = []
+            self.progress.setText("    CMT-DEL...")
+            time.sleep(0.2)
+            thr = (threading.Thread(target=del_com,args=(SESS,DEL_FLAG,user_id,service_code)))
+            thr.start()
+            self.p_d_btn.setEnabled(False)
+            self.r_d_btn.setEnabled(False)
+            self.p_d_btn.setStyleSheet("border:1px solid #ccc; background-color : #5f7b89; color : white;")
+            self.r_d_btn.setStyleSheet("border:1px solid #ccc; background-color : #5f7b89; color : white;")
 
-                usid = self.usid.text()
-                self.progress.setText("    CMT-DEL...")
-                self.p_d_btn.setEnabled(False)
-                self.r_d_btn.setEnabled(False)
-                self.p_d_btn.setStyleSheet("border:1px solid #ccc; background-color : #5f7b89; color : white;")
-                self.r_d_btn.setStyleSheet("border:1px solid #ccc; background-color : #5f7b89; color : white;")
+        else:
 
-                thr = (threading.Thread(target=del_com,args=(SESS,DEL_FLAG,usid)))
-                thr.start()
-
-            else:
-
-                self.progress.setText("    로그인 해줘요!")
-        
-        process()
+            self.progress.setText("    로그인 해줘요!")
 
         def check():
 

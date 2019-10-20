@@ -1,34 +1,13 @@
-# 2019-9-17
+# 2019-9-20
 
 import requests
 import re
 import time
 from bs4 import BeautifulSoup
-from decode_py import decode
 
-def del_com(SESS,DEL_FLAG,user_id):
+def del_com(SESS,DEL_FLAG,user_id,service_code):
 
-        req = SESS.get('https://gallog.dcinside.com/%s/posting'%user_id)
-        soup = BeautifulSoup(req.text,'lxml')
-
-        service_code_origin = soup.find('input', {'name' : 'service_code'})['value']
-
-        data  = soup.select("script")[29]
-
-        cut_1 = "var _r = _d"
-        cut_2 = '<script type="text/javascript">'
-        cut_3 = "</script>"
-
-        cut_data = str(data).replace(cut_1,"")
-        cut_data = str(cut_data).replace(cut_2,"")
-        cut_data = str(cut_data).replace(cut_3,"")
-        _r = re.sub("\n","",str(cut_data))
-        r_value = re.sub("['();]","",str(_r))
-        r_value = str(r_value)
-        # 정규식
-
-        service_code = decode(service_code_origin, r_value)
-        time.sleep(0.5)
+        print ("asdf")
 
         while True: #P_DEL
 
@@ -59,9 +38,9 @@ def del_com(SESS,DEL_FLAG,user_id):
                     }
 
                     time.sleep(0.5)
-                    req = SESS.post('https://gallog.dcinside.com/%s/ajax/log_list_ajax/delete'%user_id,data=delete_data)
-
+                    req = SESS.post('https://gallog.dcinside.com/%s/ajax/log_list_ajax/delete'%user_id,data=delete_data,timeout=10)
                     result = req.text
+                    print (result)
                             
                 delete_set.clear()
                     

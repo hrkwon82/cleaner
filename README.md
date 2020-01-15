@@ -1,3 +1,4 @@
+/*
 개발자에게 연락하기
 -------------
 
@@ -28,3 +29,4 @@ RUN-GIF
 -------------
 
 <img src="https://i.imgur.com/jPhrttj.gif" title="Honeycam 2019-10-16 04-09-47.gif"/>
+*/
